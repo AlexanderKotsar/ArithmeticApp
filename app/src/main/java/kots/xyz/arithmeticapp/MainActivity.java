@@ -6,9 +6,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+
 public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     private Button playBtn, helpBtn, highBtn;
+    private String[] levelNames = {"Easy", "Medium", "Hard"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +30,22 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         playBtn.setOnClickListener(this);
         helpBtn.setOnClickListener(this);
         highBtn.setOnClickListener(this);
+
+        //Создаем диалоговое окно в случае, если нажали на кнопку "Запустить"
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        //передает массив имен уровней и настраиваем  слушателей для вариантов
+        builder.setTitle("Choose a level")
+                .setSingleChoiceItems(levelNames, 0, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        //start gameplay
+                        startPlay(which);
+                    }
+                });
+
+        AlertDialog ad = builder.create();
+        ad.show();
     }
 
     @Override
@@ -39,5 +61,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         else if(view.getId()==R.id.high_btn){
             //high scores button
         }
+    }
+
+    private void startPlay(int chosenLevel)
+    {
+        //start gameplay
+        Intent playIntent = new Intent(this, PlayGame.class);
+        playIntent.putExtra("level", chosenLevel);
+        this.startActivity(playIntent);
     }
 }
