@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">You Do The Math!</string>
-    <string name="help_info">You Do The Math! is an arithmetic game.\n\nChoose Easy, Medium or Hard level to begin.\n\nAnswer the question by typing on the number pad displayed and pressing enter. Press the C button to clear an existing answer. Each question may be an addition, subtraction, multiplication or division.\n\nYour ten best scores will automatically be saved into the High Scores.</string>
+    <!--<string name="help_info">You Do The Math! is an arithmetic game.\n\nChoose Easy, Medium or Hard level to begin.\n\nAnswer the question by typing on the number pad displayed and pressing enter. Press the C button to clear an existing answer. Each question may be an addition, subtraction, multiplication or division.\n\nYour ten best scores will automatically be saved into the High Scores.</string>-->
+    <string name="help_info">Это арифметическая игра.\n\n
+Выберите начальный, средний или тяжелый уровень.\n\n
+Ответьте на вопрос, набрав номер на цифровой клавиатуре и нажав клавишу ввода.
+Нажмите кнопку C, чтобы удалить существующий ответ.\n
+Каждый вопрос может быть на сложение, вычитание, умножение или деление.\n\n
+Ваши десять лучших результатов будут автоматически сохранены в рекорды.</string>
 </resources>
