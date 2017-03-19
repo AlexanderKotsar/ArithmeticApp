@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         else if(view.getId()==R.id.help_btn){
             //how to play button
 
-
+            Intent helpIntent = new Intent(this, HowToPlay.class);
+            this.startActivity(helpIntent);
         }
         else if(view.getId()==R.id.high_btn){
             //high scores button
