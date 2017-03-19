@@ -23,26 +23,14 @@ public class PlayGame extends Activity implements OnClickListener{
     //добавим массив для отображения каждого из этих операторов, с индексом массива, соответствующего постоянной в каждом случае
     private String[] operators = {"+", "-", "x", "/"};
 
-    private int[][] levelMin = {
-            {1, 11, 21},
-            {1, 5, 10},
-            {2, 5, 10},
-            {2, 3, 5}};
-    private int[][] levelMax = {
-            {10, 25, 50},
-            {10, 20, 30},
-            {5, 10, 15},
-            {10, 50, 100}};
+    private int[][] levelMin = {{1, 11, 21},{1, 5, 10},{2, 5, 10},{2, 3, 5}};
+    private int[][] levelMax = {{10, 25, 50},{10, 20, 30},{5, 10, 15},{10, 50, 100}};
 
     private Random random;
 
     private TextView question, answerTxt, scoreTxt;
     private ImageView response;
     private Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, enterBtn, clearBtn;
-
-
-
-
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -90,22 +78,13 @@ public class PlayGame extends Activity implements OnClickListener{
 
         //получаем количество пройденных уровней
         Bundle extras = getIntent().getExtras();
-        if(extras != null)
-        {
+        if(extras != null) {
             int passedLevel = extras.getInt("level", -1);
             if(passedLevel>=0) level = passedLevel;
         }
-
         random = new Random();
-
         chooseQuestion();
     }
-
-    @Override
-    public void onClick(View view) {
-
-    }
-
     //метод будет выполняться каждый раз когда нужен новый вопрос. Он подберет операторов и операндов в случайном порядке, в пределах диапазона и уровня. Метод будет выводить вопрос к пользовательскому интерфейсу, готового для ответа пользователя
     private void chooseQuestion(){
 
@@ -128,16 +107,13 @@ public class PlayGame extends Activity implements OnClickListener{
 
         //обеспечиваем, что ответ = целое число
         else if(operator==DIVIDE_OPERATOR){
-            while((((double)operand1/(double)operand2)%1 > 0) || (operand1==operand2))
-            {
+            while((((double)operand1/(double)operand2)%1 > 0) || (operand1==operand2)) {
                 operand1 = getOperand();
                 operand2 = getOperand();
             }
         }
-
         //считаем ответ
-        switch(operator)
-        {
+        switch(operator) {
             case ADD_OPERATOR:
                 answer = operand1+operand2;
                 break;
@@ -153,19 +129,65 @@ public class PlayGame extends Activity implements OnClickListener{
             default:
                 break;
         }
-
         //отовражаем вопрос пользователю
         question.setText(operand1+" "+operators[operator]+" "+operand2);
     }
 
     private int getOperand(){
-
         //return operand number
-        //Метод возвращает целое число в соответствующем диапазоне
-        return random.nextInt(levelMax[operator][level] - levelMin[operator][level] + 1)
-                + levelMin[operator][level];
+        //возвращает целое число в соответствующем диапазоне
+        return random.nextInt(levelMax[operator][level] - levelMin[operator][level] + 1) + levelMin[operator][level];
     }
 
+    @Override
+    public void onClick(View view) {
 
+        //Узнаем, какая кнопка была нажата
+        if(view.getId()==R.id.enter){
+            //enter button
+            String answerContent = answerTxt.getText().toString();
+
+            if(!answerContent.endsWith("?")) {
+                //we have an answer
+                int enteredAnswer = Integer.parseInt(answerContent.substring(2));
+
+                //храним количество правильных ответов в этом заходе
+                int exScore = getScore();
+
+                if(enteredAnswer==answer){
+                    //correct
+                    //обновляем счет, иконку
+                    scoreTxt.setText("Score: "+(exScore+1));
+                    response.setImageResource(R.drawable.tick);
+                    response.setVisibility(View.VISIBLE);
+                }else{
+                    //incorrect
+                    //сбрасываем результат к нулю и отображение крестика
+                    scoreTxt.setText("Score: 0");
+                    response.setImageResource(R.drawable.cross);
+                    response.setVisibility(View.VISIBLE);
+                }
+                chooseQuestion();
+            }
+        }else if(view.getId()==R.id.clear){
+            //сбросить ответ
+            answerTxt.setText("= ?");
+        }else {
+            //сначала скрываем картинку ответа
+            response.setVisibility(View.INVISIBLE);
+
+            int enteredNum = Integer.parseInt(view.getTag().toString());
+
+            if(answerTxt.getText().toString().endsWith("?"))
+                answerTxt.setText("= " + enteredNum);
+            else
+                answerTxt.append("" + enteredNum);
+        }
+    }
+    //считаем количество правильных ответов
+    private int getScore(){
+        String scoreStr = scoreTxt.getText().toString();
+        return Integer.parseInt(scoreStr.substring(scoreStr.lastIndexOf(" ")+1));
+    }
 
 }
